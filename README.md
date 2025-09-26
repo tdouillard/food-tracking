@@ -116,7 +116,6 @@ npm run preview
 | `npm run dev`      | Start development server (Vite)            |
 | `npm run build`    | Production build                           |
 | `npm run preview`  | Preview production build locally           |
-| `npm run prebuild` | (Reserved) run any pre-build tasks/scripts |
 | `npm run lint`     | Run ESLint                                 |
 | `npm run lint:fix` | Auto-fix ESLint issues                     |
 | `npm run test`     | Run tests in watch mode (Vitest)           |
