@@ -1,0 +1,66 @@
+<div class="container">
+  <div class="card">
+    <h2>📊 Nutrition Statistics</h2>
+    <div class="form-group">
+      <label class="form-label">Time Period</label>
+      <select class="form-select" id="time-filter">
+        <option value="week">This Week</option>
+        <option value="month">This Month</option>
+        <option value="year">This Year</option>
+        <option value="30days">Last 30 Days</option>
+        <option value="90days">Last 90 Days</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="loading" class="text-center" style="padding: 2rem;">
+    <span class="spinner"></span> Loading statistics...
+  </div>
+
+  <div id="stats-content" class="hidden">
+    <div class="card">
+      <h3>Summary</h3>
+      <div id="summary-stats" class="grid summary-grid"></div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>Daily Calories</h3>
+        <div class="chart-container">
+          <canvas id="calories-chart"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Macronutrients Distribution</h3>
+        <div class="chart-container">
+          <canvas id="macros-chart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>Daily Nutrition Trend</h3>
+        <div class="chart-container">
+          <canvas id="nutrition-trend-chart"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Meal Distribution</h3>
+        <div class="chart-container">
+          <canvas id="meal-distribution-chart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Export Data</h3>
+      <div class="form-group">
+        <button class="btn btn-secondary" id="export-csv">📊 Export as CSV</button>
+        <button class="btn btn-secondary" id="export-json">📄 Export as JSON</button>
+      </div>
+    </div>
+  </div>
+</div>

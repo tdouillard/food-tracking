@@ -1,0 +1,81 @@
+<div class="container">
+  <div class="card">
+    <h2>⚙️ Settings</h2>
+  </div>
+
+  <div class="card">
+    <h3>Storage Options</h3>
+    <div class="form-group">
+      <label class="form-label">Storage Type</label>
+      <select class="form-select" id="storage-type">
+        <option value="local">Local Storage (IndexedDB)</option>
+        <option value="remote">Remote Storage (SQL Database)</option>
+      </select>
+      <small class="muted-note">
+        Local storage keeps your data on this device. Remote storage allows sync across devices but requires authentication.
+      </small>
+    </div>
+
+    <div id="remote-settings" class="hidden">
+      <div class="form-group">
+        <label class="form-label">API URL</label>
+        <input type="url" class="form-input" id="api-url" placeholder="https://your-api-server.com/api">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Authentication</label>
+        <div id="auth-status" class="mb-2"></div>
+        <div id="auth-form">
+          <input type="email" class="form-input" id="email" placeholder="Email" style="margin-bottom: 0.5rem;">
+          <input type="password" class="form-input" id="password" placeholder="Password" style="margin-bottom: 0.5rem;">
+          <button class="btn btn-primary" id="login-btn">Login</button>
+          <button class="btn btn-secondary" id="register-btn">Register</button>
+        </div>
+        <button class="btn btn-danger hidden" id="logout-btn">Logout</button>
+      </div>
+    </div>
+
+    <div class="form-group mt-2">
+      <button class="btn btn-primary" id="save-storage-settings">Save Storage Settings</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Data Management</h3>
+    <div class="form-group">
+      <h4>Import Data</h4>
+      <input type="file" id="import-file" accept=".json,.csv" class="form-input">
+      <button class="btn btn-secondary" id="import-data" disabled>Import Data</button>
+      <small class="muted-note">Import data from a JSON export or CSV file.</small>
+    </div>
+
+    <div class="form-group">
+      <h4>Export Data</h4>
+      <button class="btn btn-secondary" id="export-all-json">Export All Data (JSON)</button>
+      <small class="muted-note">Export all your meals and data as JSON file.</small>
+    </div>
+
+    <div class="form-group">
+      <h4>Clear All Data</h4>
+      <button class="btn btn-danger" id="clear-all-data">Clear All Local Data</button>
+      <small class="muted-note">⚠️ This will permanently delete all locally stored meals and cannot be undone.</small>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>App Information</h3>
+    <p><strong>Version:</strong> 1.0.0</p>
+    <p><strong>Storage Type:</strong> <span id="current-storage-type"></span></p>
+    <p><strong>Total Meals:</strong> <span id="total-meals">Loading...</span></p>
+    <p><strong>Data Size:</strong> <span id="data-size">Calculating...</span></p>
+    <div class="mt-2">
+      <h4>Privacy & Data</h4>
+      <p class="privacy-text">
+        This app respects your privacy. When using local storage, your data never leaves your device. 
+        When using remote storage, data is transmitted securely and stored according to your server's privacy policy.
+      </p>
+    </div>
+  </div>
+
+  <div id="alert-container"></div>
+</div>

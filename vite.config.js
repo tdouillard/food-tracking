@@ -1,18 +1,32 @@
-import { defineConfig } from 'vite';
-import legacy from '@vitejs/plugin-legacy';
+import { defineConfig } from "vite";
+import { resolve } from "path";
 
 export default defineConfig({
-  plugins: [
-    legacy({
-      targets: ['defaults', 'not IE 11'],
-    }),
-  ],
+  // Use relative base so the built index.html loads assets relatively.
+  // This is portable and works when serving dist from any root.
+  base: "/food-tracking/",
+
+  // public/ will be copied to dist/
+  publicDir: "public",
+
   build: {
-    outDir: 'dist',
-    sourcemap: true,
+    outDir: "dist",
+    assetsDir: "assets",
+    sourcemap: false,
+    emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, "index.html"),
+      },
+    },
   },
+
+  css: {
+    devSourcemap: true,
+  },
+
   server: {
-    port: 3000,
-    open: true,
+    port: 5173,
+    open: false,
   },
 });

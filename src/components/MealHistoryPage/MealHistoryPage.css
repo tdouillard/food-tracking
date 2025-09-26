@@ -1,0 +1,103 @@
+.meal-history-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  transition: grid-template-columns 0.3s ease;
+}
+.meal-history-layout.with-sidebar {
+  grid-template-columns: 1fr 400px;
+}
+.meal-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.meal-history-item {
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+.meal-history-item:hover {
+  background: var(--color-surface-alt);
+  border-color: var(--color-border-alt);
+}
+.meal-history-item-info h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+}
+.meal-history-meta {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.25rem;
+}
+.meal-history-kcal {
+  font-size: 0.8rem;
+  color: var(--color-text-subtle);
+  font-weight: 500;
+}
+.meal-history-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.meal-history-empty {
+  padding: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  right: -450px;
+  width: 400px;
+  height: 100vh;
+  background: var(--color-surface);
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  overflow-y: auto;
+  transition: right 0.3s ease;
+  padding: 1rem;
+}
+.sidebar-overlay.open {
+  right: 0;
+}
+.sidebar-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+}
+.sidebar-backdrop.open {
+  opacity: 1;
+  visibility: visible;
+}
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border-alt);
+}
+.sidebar-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--color-text-muted);
+}

@@ -1,0 +1,40 @@
+<div class="meal-history-layout" id="main-layout">
+  <div class="card">
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      "
+    >
+      <h2 style="margin: 0">Meal History</h2>
+    </div>
+
+    <div class="form-group" style="margin-bottom: 1rem">
+      <input
+        type="text"
+        class="form-input"
+        id="meal-history-filter"
+        placeholder="Filter meals..."
+        autocomplete="off"
+      />
+    </div>
+
+    <div class="meal-history-list" id="meal-history-list">
+      <div class="meal-history-empty">Loading meals…</div>
+    </div>
+  </div>
+</div>
+
+<!-- Sidebar backdrop -->
+<div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+<!-- Sidebar overlay -->
+<div class="sidebar-overlay" id="sidebar-overlay">
+  <div class="sidebar-header">
+    <h3 id="sidebar-title">Add New Meal</h3>
+    <button class="sidebar-close" id="sidebar-close">&times;</button>
+  </div>
+  <div id="sidebar-content"></div>
+</div>

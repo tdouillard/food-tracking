@@ -1,0 +1,17 @@
+.muted-note {
+  color: var(--color-text-muted);
+  margin-top: 0.5rem;
+  display: block;
+  font-size: 0.8rem;
+}
+.privacy-text {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+#auth-status .alert {
+  margin-bottom: 0.5rem;
+}
+#alert-container {
+  margin-top: 1rem;
+}
