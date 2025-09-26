@@ -1,0 +1,104 @@
+@media (min-width: 1000px) {
+  /* Only apply multi-column layout if not explicitly forced to mobile */
+  .container.meal-layout:not(.force-mobile) {
+    display: grid;
+    grid-template-columns: 300px 1fr 1fr;
+    gap: 1.25rem;
+    align-items: start;
+  }
+  .container.meal-layout:not(.force-mobile) .card.sidebar-card {
+    grid-column: 1;
+    grid-row: 1 / span 3;
+    position: sticky;
+    top: 1rem;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+  }
+}
+
+#meal-history-card {
+  display: none;
+}
+
+/* When forced to mobile, ensure stacking layout */
+.container.meal-layout.force-mobile {
+  display: block;
+}
+.meal-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.meal-history-item {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+.meal-history-item:hover {
+  background: var(--color-surface-alt);
+  border-color: var(--color-border-alt);
+}
+.meal-history-item.active {
+  outline: 2px solid var(--color-primary);
+  background: var(--color-surface-alt);
+}
+.meal-history-meta {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+}
+.meal-history-kcal {
+  font-size: 0.75rem;
+  color: var(--color-text-subtle);
+}
+.meal-history-empty {
+  padding: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+.search-results {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  max-height: 320px;
+  overflow-y: auto;
+  z-index: 50;
+}
+.search-results.hidden {
+  display: none;
+}
+.search-item {
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--color-border-alt);
+}
+.search-item:hover {
+  background: var(--color-surface-alt);
+}
+.food-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.6rem 0.75rem;
+  margin-bottom: 0.5rem;
+  background: var(--color-surface);
+}
+.food-item-info h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.95rem;
+}

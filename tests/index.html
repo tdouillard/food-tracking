@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Tracking App - Tests</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f5f5f5;
+        }
+        .test-suite {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .test {
+            margin: 1rem 0;
+            padding: 0.5rem;
+            border-left: 3px solid #ddd;
+            padding-left: 1rem;
+        }
+        .test.pass {
+            border-left-color: #4CAF50;
+            background: #f1f8e9;
+        }
+        .test.fail {
+            border-left-color: #f44336;
+            background: #ffebee;
+        }
+        .summary {
+            background: #e3f2fd;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+        }
+        #results {
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Food Tracking App - Test Suite</h1>
+    
+    <div class="summary" id="summary">
+        <h2>Test Summary</h2>
+        <div id="results">Running tests...</div>
+    </div>
+
+    <div class="test-suite">
+        <h2>Storage Service Tests</h2>
+        <div id="storage-tests"></div>
+    </div>
+
+    <div class="test-suite">
+        <h2>OpenFoodFacts Service Tests</h2>
+        <div id="openfoodfacts-tests"></div>
+    </div>
+
+    <div class="test-suite">
+        <h2>Router Tests</h2>
+        <div id="router-tests"></div>
+    </div>
+
+    <script type="module">
+        import { StorageService } from '../src/services/StorageService.js';
+        import { OpenFoodFactsService } from '../src/services/OpenFoodFactsService.js';
+        import { Router } from '../src/utils/Router.js';
+
+        class TestRunner {
+            constructor() {
+                this.tests = [];
+                this.passed = 0;
+                this.failed = 0;
+            }
+
+            test(name, fn) {
+                this.tests.push({ name, fn });
+            }
+
+            async run() {
+                console.log('🏃 Running tests...');
+                
+                for (const test of this.tests) {
+                    try {
+                        await test.fn();
+                        this.pass(test.name);
+                    } catch (error) {
+                        this.fail(test.name, error.message);
+                    }
+                }
+
+                this.showSummary();
+            }
+
+            pass(name) {
+                this.passed++;
+                this.addTestResult(name, 'pass', '✅ PASS');
+            }
+
+            fail(name, error) {
+                this.failed++;
+                this.addTestResult(name, 'fail', `❌ FAIL: ${error}`);
+            }
+
+            addTestResult(name, status, message) {
+                const container = document.getElementById(this.currentSuite);
+                const testDiv = document.createElement('div');
+                testDiv.className = `test ${status}`;
+                testDiv.innerHTML = `<strong>${name}</strong><br>${message}`;
+                container.appendChild(testDiv);
+            }
+
+            showSummary() {
+                const total = this.passed + this.failed;
+                const results = document.getElementById('results');
+                results.innerHTML = `
+                    <strong>Total Tests:</strong> ${total}<br>
+                    <strong style="color: #4CAF50">Passed:</strong> ${this.passed}<br>
+                    <strong style="color: #f44336">Failed:</strong> ${this.failed}<br>
+                    <strong>Success Rate:</strong> ${total > 0 ? Math.round((this.passed / total) * 100) : 0}%
+                `;
+            }
+
+            setSuite(suiteId) {
+                this.currentSuite = suiteId;
+            }
+        }
+
+        const runner = new TestRunner();
+
+        // Storage Service Tests
+        runner.setSuite('storage-tests');
+        
+        runner.test('StorageService initialization', async () => {
+            const storage = new StorageService();
+            if (!storage) throw new Error('Failed to initialize StorageService');
+            if (storage.storageType !== 'local') throw new Error('Default storage type should be local');
+        });
+
+        runner.test('Meal saving and retrieval', async () => {
+            const storage = new StorageService();
+            const testMeal = {
+                name: 'Test Meal',
+                timestamp: new Date().toISOString(),
+                products: [],
+                totalNutrition: { energy: 100, proteins: 10, carbohydrates: 20, fat: 5 }
+            };
+
+            const mealId = await storage.saveMeal(testMeal);
+            if (!mealId) throw new Error('Failed to save meal');
+
+            const meals = await storage.getMeals();
+            const savedMeal = meals.find(m => m.id === mealId);
+            if (!savedMeal) throw new Error('Saved meal not found');
+            if (savedMeal.name !== testMeal.name) throw new Error('Meal name mismatch');
+
+            // Cleanup
+            await storage.deleteMeal(mealId);
+        });
+
+        runner.test('Data export functionality', async () => {
+            const storage = new StorageService();
+            const exportData = await storage.exportData();
+            
+            if (!exportData.meals) throw new Error('Export data missing meals array');
+            if (!exportData.exportDate) throw new Error('Export data missing export date');
+            if (!exportData.version) throw new Error('Export data missing version');
+        });
+
+        // OpenFoodFacts Service Tests
+        runner.setSuite('openfoodfacts-tests');
+
+        runner.test('OpenFoodFactsService initialization', async () => {
+            const service = new OpenFoodFactsService();
+            if (!service) throw new Error('Failed to initialize OpenFoodFactsService');
+            if (!service.baseUrl) throw new Error('Base URL not set');
+        });
+
+        runner.test('Product normalization', async () => {
+            const service = new OpenFoodFactsService();
+            const rawProduct = {
+                _id: 'test123',
+                product_name: 'Test Product',
+                brands: 'Test Brand',
+                nutriments: {
+                    'energy-kcal_100g': 250,
+                    'proteins_100g': 10,
+                    'carbohydrates_100g': 30,
+                    'fat_100g': 8
+                }
+            };
+
+            const normalized = service.normalizeProduct(rawProduct);
+            if (normalized.id !== 'test123') throw new Error('ID normalization failed');
+            if (normalized.name !== 'Test Product') throw new Error('Name normalization failed');
+            if (normalized.nutrition.energy !== 250) throw new Error('Energy normalization failed');
+        });
+
+        runner.test('Quantity parsing', async () => {
+            const service = new OpenFoodFactsService();
+            
+            const tests = [
+                { input: '100g', expected: 100 },
+                { input: '1kg', expected: 1000 },
+                { input: '250ml', expected: 250 },
+                { input: '1.5l', expected: 1500 }
+            ];
+
+            for (const test of tests) {
+                const result = service.parseQuantity(test.input);
+                if (result !== test.expected) {
+                    throw new Error(`Quantity parsing failed: ${test.input} should be ${test.expected}, got ${result}`);
+                }
+            }
+        });
+
+        runner.test('Nutrition calculation for quantity', async () => {
+            const service = new OpenFoodFactsService();
+            const product = {
+                nutrition: {
+                    energy: 250, // per 100g
+                    proteins: 10,
+                    carbohydrates: 30,
+                    fat: 8
+                }
+            };
+
+            const nutrition = service.calculateNutritionForQuantity(product, '200g');
+            if (nutrition.energy !== 500) throw new Error('Energy calculation failed');
+            if (nutrition.proteins !== 20) throw new Error('Protein calculation failed');
+        });
+
+        // Router Tests
+        runner.setSuite('router-tests');
+
+        runner.test('Router initialization', async () => {
+            const router = new Router();
+            if (!router) throw new Error('Failed to initialize Router');
+            if (!router.routes) throw new Error('Routes map not initialized');
+        });
+
+        runner.test('Route registration', async () => {
+            const router = new Router();
+            let called = false;
+            const handler = () => { called = true; return { render: () => {} }; };
+            
+            router.addRoute('/test', handler);
+            if (!router.routes.has('/test')) throw new Error('Route not registered');
+        });
+
+        // Run all tests
+        await runner.run();
+    </script>
+</body>
+</html>
