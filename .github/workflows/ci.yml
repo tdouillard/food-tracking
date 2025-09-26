@@ -12,17 +12,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js 18
-        uses: actions/setup-node@v4
+      - name: Setup Yarn
+        uses: ./.github/actions/setup-yarn
         with:
-          node-version: "18"
-      - name: Install dependencies
-        run: npm ci
+          node-version: "22"
+          immutable: "true"
       - name: Run tests and coverage
-        run: npm run coverage
+        run: yarn coverage || yarn run coverage
         continue-on-error: true
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           files: coverage/lcov.info
           fail_ci_if_error: false
