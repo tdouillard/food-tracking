@@ -1,5 +1,6 @@
 import { StorageService } from "../../services/StorageService.js";
 import { Chart, registerables } from "chart.js";
+import { StatTile } from "../shared/StatTile.js";
 import template from "./StatsPage.html?raw";
 import "./StatsPage.css";
 import {
@@ -103,32 +104,22 @@ export class StatsPage {
     const totalMeals = meals.length;
     const avgMealsPerDay = this.calculateAverageMealsPerDay(meals);
 
-    document.getElementById("summary-stats").innerHTML = `
-      <div class="stat-card">
-        <div class="stat-number">${totalMeals}</div>
-        <div class="stat-label">Total Meals</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">${Math.round(avgCaloriesPerDay)}</div>
-        <div class="stat-label">Avg Calories/Day</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">${avgMealsPerDay.toFixed(1)}</div>
-        <div class="stat-label">Avg Meals/Day</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">${Math.round(totalNutrition.proteins)}</div>
-        <div class="stat-label">Total Proteins (g)</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">${Math.round(totalNutrition.carbohydrates)}</div>
-        <div class="stat-label">Total Carbs (g)</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">${Math.round(totalNutrition.fat)}</div>
-        <div class="stat-label">Total Fats (g)</div>
-      </div>
-    `;
+    const stats = [
+      { value: totalMeals, label: "Total Meals" },
+      { value: Math.round(avgCaloriesPerDay), label: "Avg Calories/Day" },
+      { value: avgMealsPerDay.toFixed(1), label: "Avg Meals/Day" },
+      { value: `${Math.round(totalNutrition.proteins)}g`, label: "Proteins" },
+      {
+        value: `${Math.round(totalNutrition.carbohydrates)}g`,
+        label: "Carbs",
+      },
+      { value: `${Math.round(totalNutrition.fat)}g`, label: "Fats" },
+    ];
+
+    document.getElementById("summary-stats").innerHTML = StatTile.renderGrid(
+      stats,
+      { className: "summary-grid" },
+    );
   }
 
   renderCaloriesChart(meals) {

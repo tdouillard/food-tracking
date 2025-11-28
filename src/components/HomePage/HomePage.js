@@ -1,5 +1,6 @@
 import { StorageService } from "../../services/StorageService.js";
 import { format, startOfDay, endOfDay } from "date-fns";
+import { StatTile } from "../shared/StatTile.js";
 import template from "./HomePage.html?raw";
 import "./HomePage.css";
 
@@ -61,26 +62,12 @@ export class HomePage {
   }
 
   renderNutritionSummary(nutrition) {
+    const stats = StatTile.nutritionTiles(nutrition);
     return `
       <div>
         <h3>Nutrition Summary</h3>
-        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
-          <div class="stat-card">
-            <div class="stat-number">${Math.round(nutrition.energy)}</div>
-            <div class="stat-label">Calories</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">${Math.round(nutrition.proteins)}g</div>
-            <div class="stat-label">Proteins</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">${Math.round(nutrition.carbohydrates)}g</div>
-            <div class="stat-label">Carbs</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">${Math.round(nutrition.fat)}g</div>
-            <div class="stat-label">Fats</div>
-          </div>
+        <div class="mt-2">
+          ${StatTile.renderGrid(stats)}
         </div>
       </div>
     `;
@@ -90,7 +77,7 @@ export class HomePage {
     return `
       <div>
         <h3>Quick Actions</h3>
-        <div style="margin-top: 1rem;">
+        <div class="mt-2">
           <a href="#/add-meal" class="btn btn-primary">➕ Add Meal</a>
           <a href="#/stats" class="btn btn-secondary">📊 View Statistics</a>
           <button class="btn btn-secondary" id="scan-barcode">📷 Scan Barcode</button>
@@ -106,6 +93,7 @@ export class HomePage {
           .map(
             (meal) => `
           <div class="food-item" data-meal-id="${meal.id}">
+            ${this.renderMealImage(meal)}
             <div class="food-item-info">
               <h4>${meal.name}</h4>
               <p>
@@ -118,7 +106,7 @@ export class HomePage {
                   ? meal.products
                       .map(
                         (product) => `
-                <p style="margin-left: 1rem; color: #888; font-size: 0.8rem;">
+                <p class="product-detail">
                   ${product.name} (${product.quantity})
                 </p>
               `,
@@ -136,6 +124,15 @@ export class HomePage {
           .join("")}
       </div>
     `;
+  }
+
+  renderMealImage(meal) {
+    // Find first product with an image
+    const productWithImage = meal.products?.find((p) => p.imageUrl);
+    if (productWithImage) {
+      return `<img src="${productWithImage.imageUrl}" alt="${productWithImage.name}" class="meal-image-preview">`;
+    }
+    return `<div class="meal-image-placeholder">🍽️</div>`;
   }
 
   renderEmptyState() {

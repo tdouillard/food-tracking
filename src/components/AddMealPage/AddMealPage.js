@@ -1,5 +1,6 @@
 import { StorageService } from "../../services/StorageService.js";
 import { OpenFoodFactsService } from "../../services/OpenFoodFactsService.js";
+import { StatTile } from "../shared/StatTile.js";
 import template from "./AddMealPage.html?raw";
 import "./AddMealPage.css";
 
@@ -418,35 +419,8 @@ export class AddMealPage {
 
   renderNutritionSummary() {
     const totalNutrition = this.calculateTotalNutrition();
-
-    return `
-      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem;">
-        <div class="stat-card">
-          <div class="stat-number">${Math.round(totalNutrition.energy)}</div>
-          <div class="stat-label">Calories</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">${Math.round(totalNutrition.proteins)}g</div>
-          <div class="stat-label">Proteins</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">${Math.round(totalNutrition.carbohydrates)}g</div>
-          <div class="stat-label">Carbs</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">${Math.round(totalNutrition.fat)}g</div>
-          <div class="stat-label">Fats</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">${Math.round(totalNutrition.sugars)}g</div>
-          <div class="stat-label">Sugars</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">${Math.round(totalNutrition.fiber)}g</div>
-          <div class="stat-label">Fiber</div>
-        </div>
-      </div>
-    `;
+    const stats = StatTile.extendedNutritionTiles(totalNutrition);
+    return StatTile.renderGrid(stats);
   }
 
   calculateTotalNutrition() {

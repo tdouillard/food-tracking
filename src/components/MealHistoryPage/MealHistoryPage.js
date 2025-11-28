@@ -82,8 +82,10 @@ export class MealHistoryPage {
         const kcal = Math.round(
           m.totalNutrition?.energy || this.computeEnergyFallback(m),
         );
+        const imageHtml = this.renderMealImage(m);
         return `
                     <div class="meal-history-item">
+                        ${imageHtml}
                         <div class="meal-history-item-info">
                             <h4>${m.name || "Meal"}</h4>
                             <div class="meal-history-meta">${this.formatShortDate(m.timestamp)}</div>
@@ -181,6 +183,15 @@ export class MealHistoryPage {
         acc + (p.calculatedNutrition?.energy || p.nutrition?.energy || 0),
       0,
     );
+  }
+
+  renderMealImage(meal) {
+    // Find first product with an image
+    const productWithImage = meal.products?.find((p) => p.imageUrl);
+    if (productWithImage) {
+      return `<img src="${productWithImage.imageUrl}" alt="${productWithImage.name}" class="meal-image-preview">`;
+    }
+    return `<div class="meal-image-placeholder">🍽️</div>`;
   }
 
   formatShortDate(ts) {
