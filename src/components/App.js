@@ -5,11 +5,13 @@ import { AddMealPage } from "./AddMealPage/AddMealPage.js";
 import { StatsPage } from "./StatsPage/StatsPage.js";
 import { SettingsPage } from "./SettingsPage/SettingsPage.js";
 import { MealHistoryPage } from "./MealHistoryPage/MealHistoryPage.js";
+import { themeToggle } from "./shared/ThemeToggle.js";
 
 export class App {
   constructor() {
     this.router = new Router();
     this.storageService = new StorageService();
+    this.themeToggle = themeToggle;
     this.setupRoutes();
   }
 
@@ -32,11 +34,15 @@ export class App {
     const header = document.createElement("header");
     header.className = "header";
     header.innerHTML = `
-      <div class="container">
+      <div class="container header-content">
         <h1>🍎 Food Tracking App</h1>
+        ${this.themeToggle.renderButton()}
       </div>
     `;
     document.body.insertBefore(header, document.getElementById("app"));
+
+    // Attach theme toggle handler
+    this.themeToggle.attachHandler();
   }
 
   renderNavigation() {

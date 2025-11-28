@@ -1,4 +1,4 @@
-.summary-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
+.summary-grid.stat-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
 .chart-container { position: relative; height: 260px; }
 #stats-content.hidden { display:none; }
 .text-center { text-align:center; }
